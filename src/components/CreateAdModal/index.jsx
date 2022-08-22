@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import classes from  './index.module.scss';
 import { Button, Modal, InputNumber, Form, Input } from 'antd';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { createAd } from '../../api'
 
 
 const CreateAdModal = () => {
@@ -15,15 +15,21 @@ const CreateAdModal = () => {
 
   const handleOk = () => {
     form.submit()
-    // setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
+  const onSuccessCreate = () => {
+    form.resetFields()
+    setIsModalVisible(false)
+  }
+
   const onFinish = (values) => {
-    console.log('Success:', values);
+    createAd(values)
+      .then(() => onSuccessCreate())
+      .catch(error => console.log('Failed:', error))
   };
 
   const onFinishFailed = (errorInfo) => {
