@@ -1,23 +1,21 @@
 
 import React from 'react';
-import './index.scss';
+import classes from './index.module.scss';
 import { Layout } from 'antd';
+import Map from  '../Map'
+
 const { Header, Footer, Sider, Content } = Layout;
-
-
 
 function App() {
   return (
-    <div className="App">
-<Layout>
-      <Sider>Sider</Sider>
+    <Layout className={classes.root}>
+      <Header>Header</Header>
       <Layout>
-        <Header>Header</Header>
-        <Content>Content</Content>
-        <Footer>Footer</Footer>
+        <Sider>Sider</Sider>
+        <Content><Map /></Content>
       </Layout>
+      <Footer>Footer</Footer>
     </Layout>
-    </div>
   );
 }
 
