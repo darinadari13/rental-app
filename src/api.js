@@ -2,7 +2,7 @@ import { db, storage } from './firebase'
 import { uid } from 'uid';
 
 import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AD_COLLECTION_NAME = 'advertisements'
 const IMAGE_COLLECTION_NAME = 'images'
@@ -30,5 +30,10 @@ export async function uploadFile(file) {
 
   const res = await uploadBytes(storageRef, file)
 
-  return res.metadata.fullPath
+
+  return res.metadata.name
+}
+
+export async function getFileDowloadUrl(fileName) {
+  return getDownloadURL(ref(storage, `${IMAGE_COLLECTION_NAME}/${fileName}`))
 }

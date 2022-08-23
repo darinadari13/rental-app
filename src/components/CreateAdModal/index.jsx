@@ -5,7 +5,7 @@ import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import { createAd, uploadFile } from '../../api'
 import { UploadOutlined } from '@ant-design/icons';
 
-const CreateAdModal = () => {
+const CreateAdModal = ({ onCreate }) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -24,6 +24,7 @@ const CreateAdModal = () => {
   const onSuccessCreate = () => {
     form.resetFields()
     setIsModalVisible(false)
+    onCreate()
   }
 
   const onFinish = (values) => {
@@ -47,8 +48,6 @@ const CreateAdModal = () => {
   const onUploadChange = ({ file, event }) => {
     const { originFileObj } = file
 
-    console.log(event);
-
     if (event) {
       uploadFile(originFileObj).then(filePath => form.setFieldValue('imagePath', filePath))
     }
@@ -57,7 +56,7 @@ const CreateAdModal = () => {
   return (
     <>
       <Button type="primary" onClick={showModal}>
-        Open Modal
+        Здати в оренду
       </Button>
       <Modal title="Create Ad" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Form
