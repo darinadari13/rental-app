@@ -1,30 +1,34 @@
-import { ref, set } from "firebase/database";
-import db from './firebase'
+import { db, storage } from './firebase'
 import { uid } from 'uid';
 
-const AD_COLLECTION_NAME = 'advertisements'
+import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { ref, uploadBytes } from "firebase/storage";
 
-export function createAd(fields) {
-  return set(ref(db, `${AD_COLLECTION_NAME}/${uid()}`), fields);
+const AD_COLLECTION_NAME = 'advertisements'
+const IMAGE_COLLECTION_NAME = 'images'
+
+export async function createAd(fields) {
+  return setDoc(doc(db, AD_COLLECTION_NAME, uid()), fields);
 }
 
-export function getAdList() {
-  // 
+export async function getAdList() {
+  const adCol = collection(db, AD_COLLECTION_NAME);
+  const adSnapshot = await getDocs(adCol);
+  return adSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
 export function updateAd(id, fields) {
-  // return set(ref(db, `${AD_COLLECTION_NAME}/${id}`), fields);
+  return updateDoc(doc(db, AD_COLLECTION_NAME, id), fields);
 }
 
 export function deleteAd(id) {
-  // 
+  return deleteDoc(doc(db, AD_COLLECTION_NAME, id));
 }
 
-export function uploadFile() {
-  // 
-}
+export async function uploadFile(file) {
+  const storageRef = ref(storage, `${IMAGE_COLLECTION_NAME}/${uid()}`);
 
-// TODO: 
-// - finish CRUD operarations
-// - implemet file upload via firebase storage (google it)
-// - draw pins by list of ads from firebase
+  const res = await uploadBytes(storageRef, file)
+
+  return res.metadata.fullPath
+}
