@@ -1,11 +1,11 @@
 import { ref, set } from "firebase/database";
 import db from './firebase'
-import { uuidv4 } from './utils'
+import { uid } from 'uid';
 
 const AD_COLLECTION_NAME = 'advertisements'
 
 export function createAd(fields) {
-  return set(ref(db, `${AD_COLLECTION_NAME}/${uuidv4()}`), fields);
+  return set(ref(db, `${AD_COLLECTION_NAME}/${uid()}`), fields);
 }
 
 export function getAdList() {
