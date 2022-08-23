@@ -20,8 +20,8 @@ function App() {
     <Layout className={classes.root}>
       <Header><CreateAdModal/></Header>
       <Layout>
-        <Sider>Sider</Sider>
         <Content><Map markers={markers} /></Content>
+         <Sider>Sider</Sider>
       </Layout>
     </Layout>
   );
