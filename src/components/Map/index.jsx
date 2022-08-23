@@ -1,34 +1,47 @@
-import React, { useRef, useEffect  } from 'react';
+import React, { useEffect } from 'react';
 import classes from  './index.module.scss';
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { API_KEY_GOOGLE_MAPS } from '../../constants';
+import Marker from '../Marker';
 
-// TODO: chage to Ukraie position
-const center = { lat: -34.397, lng: 150.644 };
-const zoom = 4;
+const center = { lat: 50.4455622, lng: 30.4790569 };
+const zoom = 12 ;
 
-const Map = () => {
+
+const MapWrapper = ({ markers }) => {
   return (
     <Wrapper apiKey={API_KEY_GOOGLE_MAPS} libraries={["places"]}>
-      <MyMapComponent center={center} zoom={zoom} />
+      <Map center={center} zoom={zoom} markers={markers}  />
     </Wrapper>
   )
 };
 
-function MyMapComponent({
+function Map({
   center,
   zoom,
+  markers
 }) {
-  const ref = useRef();
+  const ref = React.useRef(null);
+  const [map, setMap] = React.useState();
 
   useEffect(() => {
-    new window.google.maps.Map(ref.current, {
-      center,
-      zoom,
-    });
-  });
+    if (ref.current && !map) {
+      setMap(new window.google.maps.Map(ref.current, {
+        center,
+        zoom,
+      }));
+    }
+  }, [ref, map, center, zoom]);
 
-  return <div ref={ref} id="map" className={classes.root} />;
+
+  return (
+    <>
+      <div ref={ref} id="map" className={classes.root} />
+      {
+        map && markers.map(marker => <Marker key={marker.id} position={marker.position} map={map} />)
+      }
+    </>
+  );
 }
 
-export default Map;
+export default MapWrapper;

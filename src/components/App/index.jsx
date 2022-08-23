@@ -1,23 +1,28 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './index.module.scss';
 import { Layout } from 'antd';
-import { db }  from '../../firebase';
-import { uid } from 'uid';
 import Map from  '../Map'
 import CreateAdModal from '../CreateAdModal'
-const { Header, Footer, Sider, Content } = Layout;
+import { getAdList, deleteAd } from '../../api'
+
+const { Header, Sider, Content } = Layout;
 
 function App() {
+  const [adList, setAdList] = useState([]);
+
+  const markers = adList.map(ad => ({ id: ad.id, position: ad.location }))
+
+  useEffect(() => {
+    getAdList().then(setAdList)
+  }, [])
   return (
     <Layout className={classes.root}>
       <Header><CreateAdModal/></Header>
       <Layout>
         <Sider>Sider</Sider>
-        <Content><Map /></Content>
+        <Content><Map markers={markers} /></Content>
       </Layout>
-      <Footer>
-        </Footer>
     </Layout>
   );
 }

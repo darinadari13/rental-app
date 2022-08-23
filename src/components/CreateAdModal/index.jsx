@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Modal, InputNumber, Form, Input } from 'antd';
+import { Button, Modal, InputNumber, Form, Input, Upload } from 'antd';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
-import { createAd } from '../../api'
-
+import { createAd, uploadFile } from '../../api'
+import { UploadOutlined } from '@ant-design/icons';
 
 const CreateAdModal = () => {
   const [form] = Form.useForm();
@@ -42,6 +42,16 @@ const CreateAdModal = () => {
       .then(({ lat, lng }) =>
         form.setFieldValue('location', { lat, lng })
       );
+  }
+
+  const onUploadChange = ({ file, event }) => {
+    const { originFileObj } = file
+
+    console.log(event);
+
+    if (event) {
+      uploadFile(originFileObj).then(filePath => form.setFieldValue('imagePath', filePath))
+    }
   }
 
   return (
@@ -104,7 +114,21 @@ const CreateAdModal = () => {
               }}
             />
           </Form.Item>
-
+          
+           <Form.Item 
+            label="Image"
+            name="imagePath"
+            rules={[
+              {
+                required: true,
+                message: 'Please add image!',
+              },
+            ]}
+          >
+            <Upload onChange={onUploadChange}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
           
         </Form>
       </Modal>

@@ -1,8 +1,8 @@
-import { initializeApp } from 'firebase/app';
-import { getDatabase } from 'firebase/database'
+  import { initializeApp } from 'firebase/app';
 import { FIREBASE_CONFIG } from './constants'
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from "firebase/storage";
 
 const app = initializeApp(FIREBASE_CONFIG);
-const db = getDatabase(app);
-
-export default db
+export const db = getFirestore(app);
+export const storage = getStorage(app);
