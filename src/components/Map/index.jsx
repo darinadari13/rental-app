@@ -8,10 +8,10 @@ const center = { lat: 50.4455622, lng: 30.4790569 };
 const zoom = 12 ;
 
 
-const MapWrapper = ({ markers }) => {
+const MapWrapper = ({ markers, onMarkerSelect }) => {
   return (
     <Wrapper apiKey={API_KEY_GOOGLE_MAPS} libraries={["places"]}>
-      <Map center={center} zoom={zoom} markers={markers}  />
+      <Map center={center} zoom={zoom} markers={markers} onMarkerSelect={onMarkerSelect} />
     </Wrapper>
   )
 };
@@ -19,7 +19,8 @@ const MapWrapper = ({ markers }) => {
 function Map({
   center,
   zoom,
-  markers
+  markers,
+  onMarkerSelect
 }) {
   const ref = React.useRef(null);
   const [map, setMap] = React.useState();
@@ -33,12 +34,20 @@ function Map({
     }
   }, [ref, map, center, zoom]);
 
+  useEffect(() => {
+    if (map) {
+      window.google.maps.event.addListener(map, 'click', () => {
+        onMarkerSelect(null)
+      });
+    }
+  }, [map])
+
 
   return (
     <>
       <div ref={ref} id="map" className={classes.root} />
       {
-        map && markers.map(marker => <Marker key={marker.id} position={marker.position} map={map} />)
+        map && markers.map(marker => <Marker key={marker.id} id={marker.id} title={marker.title} position={marker.position} map={map} onMarkerSelect={onMarkerSelect} />)
       }
     </>
   );

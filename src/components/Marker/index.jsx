@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Marker = ({ position, map}) => {
+const Marker = ({ id, title, position, map, onMarkerSelect }) => {
   const [marker, setMarker] = React.useState();
 
   React.useEffect(() => {
@@ -15,11 +15,16 @@ const Marker = ({ position, map}) => {
       }
     };
   }, [marker]);
+
   React.useEffect(() => {
     if (marker) {
-      marker.setOptions({ position, map });
+      marker.setOptions({ title, position, map });
+      marker.addListener("click", () => {
+       onMarkerSelect(id)
+      });
     }
-  }, [marker, position, map]);
+  }, [marker, position, map, title, id]);
+
   return null;
 };
 
