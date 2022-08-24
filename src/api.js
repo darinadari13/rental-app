@@ -1,7 +1,7 @@
 import { db, storage } from './firebase'
 import { uid } from 'uid';
 
-import { collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, query, doc, where, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AD_COLLECTION_NAME = 'advertisements'
@@ -11,10 +11,18 @@ export async function createAd(fields) {
   return setDoc(doc(db, AD_COLLECTION_NAME, uid()), fields);
 }
 
-export async function getAdList() {
-  const adCol = collection(db, AD_COLLECTION_NAME);
-  const adSnapshot = await getDocs(adCol);
-  return adSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+export async function getAdList({ northEast, southWest }) {
+  const q = query(
+    collection(db, AD_COLLECTION_NAME),
+    where("location.lng", ">", southWest.lng),
+    where("location.lng", "<", northEast.lng)
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot.docs
+    .map(doc => ({ id: doc.id, ...doc.data() }))
+    .filter(doc => doc.location.lat > southWest.lat && doc.location.lat < northEast.lat);
 }
 
 export function updateAd(id, fields) {

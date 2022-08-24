@@ -12,7 +12,7 @@ function AdSidebarItem({ item }) {
   }, [])
   return (
     <List.Item className={classes.item}>
-      {imageUrl && <img src={imageUrl} />}
+      {imageUrl && <img src={imageUrl} alt=''/>}
       <span>{item.title}</span>
       <span>{item.price} UAH</span>
     </List.Item>
