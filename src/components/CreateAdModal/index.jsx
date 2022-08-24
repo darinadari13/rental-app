@@ -4,6 +4,8 @@ import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import { createAd, uploadFile } from '../../api'
 import { UploadOutlined } from '@ant-design/icons';
+import classes from './index.module.scss';
+import { getStatusClassNames } from 'antd/lib/_util/statusUtils';
 
 const CreateAdModal = ({ onCreate }) => {
   const [form] = Form.useForm();
@@ -55,10 +57,18 @@ const CreateAdModal = ({ onCreate }) => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button className={classes.root} type="primary" onClick={showModal}>
         Здати в оренду
       </Button>
-      <Modal title="Create Ad" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Додати оголошення" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}
+      footer={[
+          <Button key="ok" onClick={handleOk}>
+            Додати
+          </Button>,
+          <Button key="delete" type="primary" onClick={handleCancel}>
+            Відмінити
+          </Button>,]}
+          >
         <Form
           name="ad"
           form={form}
@@ -68,12 +78,12 @@ const CreateAdModal = ({ onCreate }) => {
           wrapperCol={{ span: 16 }}
         >
           <Form.Item
-            label="Title"
-            name="title"
+            label="Назва"
+            name='Назва'
             rules={[
               {
                 required: true,
-                message: 'Please input title!',
+                message: 'Будь ласка упишіть назву!',
               },
             ]}
           >
@@ -81,12 +91,12 @@ const CreateAdModal = ({ onCreate }) => {
           </Form.Item>
 
           <Form.Item
-            label="Price"
+            label="Ціна"
             name="price"
             rules={[
               {
                 required: true,
-                message: 'Please input price!',
+                message: 'Будь ласка упишіть ціну!',
               },
             ]}
           >
@@ -94,12 +104,12 @@ const CreateAdModal = ({ onCreate }) => {
           </Form.Item>
 
           <Form.Item
-            label="Location"
+            label='Адреса'
             name="location"
             rules={[
               {
                 required: true,
-                message: 'Please input address!',
+                message: 'Будь ласка упишіть адресу!',
               },
             ]}
           >
@@ -115,17 +125,17 @@ const CreateAdModal = ({ onCreate }) => {
           </Form.Item>
           
            <Form.Item 
-            label="Image"
+            label="Зображення"
             name="imagePath"
             rules={[
               {
                 required: true,
-                message: 'Please add image!',
+                message: 'Будь ласка додайте зображення!',
               },
             ]}
           >
             <Upload onChange={onUploadChange}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Завантажити</Button>
             </Upload>
           </Form.Item>
           
