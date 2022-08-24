@@ -8,7 +8,9 @@ const AD_COLLECTION_NAME = 'advertisements'
 const IMAGE_COLLECTION_NAME = 'images'
 
 export async function createAd(fields) {
-  return setDoc(doc(db, AD_COLLECTION_NAME, uid()), fields);
+  const id = uid()
+  await setDoc(doc(db, AD_COLLECTION_NAME, id), fields);
+  return { id, ...fields }
 }
 
 export async function getAdList({ northEast, southWest }) {

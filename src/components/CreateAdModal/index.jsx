@@ -21,15 +21,15 @@ const CreateAdModal = ({ onCreate }) => {
     setIsModalVisible(false);
   };
 
-  const onSuccessCreate = () => {
+  const onSuccessCreate = (doc) => {
+    onCreate(doc)
     form.resetFields()
     setIsModalVisible(false)
-    onCreate()
   }
 
   const onFinish = (values) => {
     createAd(values)
-      .then(() => onSuccessCreate())
+      .then(onSuccessCreate)
       .catch(error => console.log('Failed:', error))
   };
 

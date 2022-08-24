@@ -22,12 +22,16 @@ function App() {
     getAdList({ northEast, southWest }).then(setAdList)
   }, 200)
 
+  const onAdCreate = (ad) => {
+    setAdList([...adList, ad])
+  }
+
   const onMarkerSelect = (id) => {
     setSelectedAdId(id)
   }
   return (
     <Layout className={classes.root}>
-      <Header><CreateAdModal /></Header>
+      <Header><CreateAdModal onCreate={onAdCreate} /></Header>
       <Layout>
         <Content><Map markers={markers} fetchAdList={fetchAdList} onMarkerSelect={onMarkerSelect} /></Content>
         <Sider className={classes.sider}><AdSidebar adList={selectedAd ? [selectedAd] : adList} /></Sider>
