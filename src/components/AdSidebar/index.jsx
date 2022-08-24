@@ -3,19 +3,24 @@ import React, { useEffect, useState } from 'react';
 import classes from './index.module.scss';
 import { List, Button, message,  Popconfirm  } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons';
-import { getFileDowloadUrl } from '../../api'
+import { getFileDowloadUrl, deleteAd } from '../../api'
 
-function AdSidebarItem({ item }) {
+function AdSidebarItem({ item, onAdRemove }) {
   const [imageUrl, setImageUrl] = useState() 
   useEffect(() => {
     getFileDowloadUrl(item.imagePath).then(setImageUrl)
   }, [])
+
   const confirm = () => {
-  message.info('You deleted your ad');
-};
+    deleteAd(item.id)
+      .then(() => {
+          onAdRemove(item.id)
+          message.info('Ви видалили ваше оголошення');
+      })
+  };
   return (
     <List.Item className={classes.item}>
-     <Popconfirm placement="left" title={'Are you sure you want to delete ad?'} onConfirm={confirm} okText="Yes" cancelText="No">
+     <Popconfirm placement="left" title={'Ви впевнені, що хочете видалити оголошення?'} onConfirm={confirm} okText="Так" cancelText='Ні'>
         <Button><DeleteOutlined /></Button>
       </Popconfirm>
       {imageUrl && <img src={imageUrl} alt=''/>}
@@ -25,7 +30,7 @@ function AdSidebarItem({ item }) {
   );
 }
 
-function AdSidebar({ adList }) {
+function AdSidebar({ adList, onAdRemove }) {
   return (
     <div className={classes.root}>
 
@@ -33,7 +38,7 @@ function AdSidebar({ adList }) {
         size="large"
         bordered
         dataSource={adList}
-        renderItem={item => <AdSidebarItem key={item.id} item={item} />}
+        renderItem={item => <AdSidebarItem key={item.id} item={item} onAdRemove={onAdRemove} />}
       />
     </div>
   );

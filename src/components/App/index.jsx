@@ -7,7 +7,7 @@ import CreateAdModal from '../CreateAdModal'
 import { getAdList } from '../../api'
 import AdSidebar from '../AdSidebar';
 import { debounce } from '../../utils'
-
+import { HomeOutlined } from '@ant-design/icons';
 const { Header, Sider, Content } = Layout;
 
 function App() {
@@ -26,15 +26,20 @@ function App() {
     setAdList([...adList, ad])
   }
 
+  const onAdRemove = (id) => {
+    setAdList(adList.filter(ad => ad.id !== id))
+  }
+
+
   const onMarkerSelect = (id) => {
     setSelectedAdId(id)
   }
   return (
     <Layout className={classes.root}>
-      <Header><CreateAdModal onCreate={onAdCreate} /></Header>
+      <Header> <HomeOutlined className={classes.logo}/><CreateAdModal onCreate={onAdCreate} /></Header>
       <Layout>
         <Content><Map markers={markers} fetchAdList={fetchAdList} onMarkerSelect={onMarkerSelect} /></Content>
-        <Sider className={classes.sider}><AdSidebar adList={selectedAd ? [selectedAd] : adList} /></Sider>
+        <Sider className={classes.sider}><AdSidebar adList={selectedAd ? [selectedAd] : adList} onAdRemove={onAdRemove} /></Sider>
       </Layout>
     </Layout>
   );

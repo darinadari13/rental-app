@@ -60,15 +60,7 @@ const CreateAdModal = ({ onCreate }) => {
       <Button className={classes.root} type="primary" onClick={showModal}>
         Здати в оренду
       </Button>
-      <Modal title="Додати оголошення" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}
-      footer={[
-          <Button key="ok" onClick={handleOk}>
-            Додати
-          </Button>,
-          <Button key="delete" type="primary" onClick={handleCancel}>
-            Відмінити
-          </Button>,]}
-          >
+      <Modal title="Додати оголошення" visible={isModalVisible} cancelText='Відмінити' okText='Додати' onOk={handleOk} onCancel={handleCancel}>
         <Form
           name="ad"
           form={form}
@@ -79,7 +71,7 @@ const CreateAdModal = ({ onCreate }) => {
         >
           <Form.Item
             label="Назва"
-            name='Назва'
+            name='title'
             rules={[
               {
                 required: true,
